@@ -20,8 +20,8 @@ function update_gateway_fee1($vars)
 function update_gateway_fee2($vars)
 {
     $paymentmethod = $vars['paymentmethod'];
-    delete_query("tblinvoiceitems", "invoiceid='" . $vars[invoiceid] . "' and notes='gateway_fees'");
-    $result = select_query("tbladdonmodules", "setting,value", "setting='fee_2_" . $vars['paymentmethod'] . "' or setting='fee_1_" . $vars[paymentmethod] . "'");
+    delete_query("tblinvoiceitems", "invoiceid='" . $vars['invoiceid'] . "' and notes='gateway_fees'");
+    $result = select_query("tbladdonmodules", "setting,value", "setting='fee_2_" . $vars['paymentmethod'] . "' or setting='fee_1_" . $vars['paymentmethod'] . "'");
     while ($data = mysql_fetch_array($result)) {
         $params[$data[0]] = $data[1];
     }
@@ -45,14 +45,14 @@ function update_gateway_fee2($vars)
     if ($d) {
         insert_query("tblinvoiceitems", array(
             "userid" => $_SESSION['uid'],
-            "invoiceid" => $vars[invoiceid],
+            "invoiceid" => $vars['invoiceid'],
             "type" => "Fee",
             "notes" => "gateway_fees",
             "description" => getGatewayName2($vars['paymentmethod']) . " Fees ($d)",
             "amount" => $amountdue,
             "taxed" => "0",
             "duedate" => "now()",
-            "paymentmethod" => $vars[paymentmethod]
+            "paymentmethod" => $vars['paymentmethod']
         ));
     }
 
